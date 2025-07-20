@@ -1,10 +1,15 @@
 package com.rest.webservices.restful_web_services.user;
 
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class User {
     private Integer id;
+    @Size(min = 3, max = 20,message = "Name should be between 3 and 20 characters")
     private String name;
+    @Past(message = "Birth date should be in the past")
     private LocalDate brithDate;
 
     public User(Integer id, String name, LocalDate brithDate) {

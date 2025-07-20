@@ -1,5 +1,7 @@
 package com.rest.webservices.restful_web_services.user;
 
+import com.rest.webservices.restful_web_services.exception.UserNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,14 +18,25 @@ public class UserResource {
         this.service = service;
     }
 
+    /**
+     Get All
+     */
+
     @GetMapping("/users")
     public List<User> retrieveAllUsers() {
         return service.findAll();
     }
 
+/**
+ GetByID
+*/
     @GetMapping("/users/{id}")
     public User retrieveUserById(@PathVariable int id) {
-        return service.findById(id);
+        User user = service.findById(id);
+        if (user == null) {
+            throw  new UserNotFoundException("id: " + id);
+        }
+        return user;
     }
 
 
@@ -32,8 +45,11 @@ public class UserResource {
 //        service.save(user);
 //    }
 
+    /**
+     Create
+     */
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User Saveduser = service.save(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -41,4 +57,13 @@ public class UserResource {
 
         return ResponseEntity.created(location).build();
     }
+
+    /**
+     Delete
+     */
+    @DeleteMapping("/users/{id}")
+    public void deleteById(@PathVariable int id) {
+        service.deleteById(id);
+    }
+
 }
