@@ -33,7 +33,7 @@ public class UserResource {
 /**
  GetByID
 */
-//Hateos Example
+//HATEOAS Example
     @GetMapping("/users/{id}")
     public EntityModel<User> retrieveUserById(@PathVariable int id) {
         User user = service.findById(id);
